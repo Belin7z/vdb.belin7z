@@ -1,11 +1,20 @@
 export type DiscordStatus = "online" | "idle" | "dnd" | "offline";
 
+export interface LanyardPrimaryGuild {
+  identity_guild_id: string | null;
+  identity_enabled: boolean | null;
+  tag: string | null;
+  badge: string | null;
+}
+
 export interface LanyardDiscordUser {
   id: string;
   username: string;
   global_name: string | null;
   discriminator: string;
   avatar: string | null;
+  public_flags?: number;
+  primary_guild?: LanyardPrimaryGuild | null;
 }
 
 export interface LanyardSpotify {
