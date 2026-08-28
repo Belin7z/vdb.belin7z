@@ -8,9 +8,9 @@ export function Badges() {
         <span
           key={badge.id}
           title={badge.label}
-          className="relative flex h-5 w-5 shrink-0 items-center justify-center overflow-hidden rounded-full"
+          className="relative flex h-5 w-5 shrink-0 items-center justify-center"
         >
-          <Image src={badge.image} alt={badge.label} fill sizes="20px" className="object-cover" />
+          <Image src={badge.image} alt={badge.label} fill sizes="20px" className="object-contain" />
         </span>
       ))}
     </div>
