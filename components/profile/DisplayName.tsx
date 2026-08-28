@@ -20,9 +20,14 @@ export function DisplayName({ user, connectionStatus }: DisplayNameProps) {
         >
           {user.global_name ?? user.username}
         </h1>
-        <div className="mt-0.5 flex items-center justify-center gap-1.5">
+        <div className="mt-0.5 grid grid-cols-[1fr_auto_1fr] items-center gap-1.5">
+          <span aria-hidden="true" className="invisible justify-self-end">
+            <ServerTag primaryGuild={user.primary_guild} />
+          </span>
           <CopyableUsername username={user.username} />
-          <ServerTag primaryGuild={user.primary_guild} />
+          <span className="justify-self-start">
+            <ServerTag primaryGuild={user.primary_guild} />
+          </span>
         </div>
       </div>
     );
