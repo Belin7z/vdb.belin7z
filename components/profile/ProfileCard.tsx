@@ -31,12 +31,8 @@ export function ProfileCard({ initialData = null }: ProfileCardProps) {
             customStatus={data ? getCustomStatus(data.activities) : null}
           />
           <DisplayName user={data?.discord_user ?? null} connectionStatus={status} />
-          {data && (
-            <>
-              <ServerTag primaryGuild={data.discord_user.primary_guild} />
-              <Badges publicFlags={data.discord_user.public_flags} />
-            </>
-          )}
+          {data && <ServerTag primaryGuild={data.discord_user.primary_guild} />}
+          <Badges />
           {data?.listening_to_spotify ? (
             <NowPlaying spotify={data.spotify} />
           ) : (
