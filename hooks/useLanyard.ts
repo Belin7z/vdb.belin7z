@@ -6,6 +6,8 @@ import type { LanyardData } from "@/lib/lanyard/types";
 
 export type LanyardStatus = "loading" | "ready" | "error";
 
+const CONNECTION_TIMEOUT_MS = 8000;
+
 export function useLanyard(
   discordId: string,
   initialData: LanyardData | null = null
@@ -28,6 +30,16 @@ export function useLanyard(
 
     return disconnect;
   }, [discordId]);
+
+  useEffect(() => {
+    if (!discordId || initialData) return;
+
+    const timeout = setTimeout(() => {
+      setStatus((current) => (current === "loading" ? "error" : current));
+    }, CONNECTION_TIMEOUT_MS);
+
+    return () => clearTimeout(timeout);
+  }, [discordId, initialData]);
 
   return { data, status };
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Sora } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { SITE } from "@/config/site";
 import "./globals.css";
 
@@ -22,6 +23,12 @@ export const metadata: Metadata = {
     description: SITE.description,
     url: SITE.url,
     siteName: SITE.name,
+    type: "profile",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE.title,
+    description: SITE.description,
   },
 };
 
@@ -32,6 +39,7 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className={`${inter.variable} ${sora.variable} antialiased`}>
         {children}
+        <Analytics />
       </body>
     </html>
   );

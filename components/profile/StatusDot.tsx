@@ -1,11 +1,5 @@
+import { STATUS_COLOR } from "@/lib/lanyard/status";
 import type { DiscordStatus } from "@/lib/lanyard/types";
-
-const STATUS_COLOR: Record<DiscordStatus, string> = {
-  online: "bg-emerald-500",
-  idle: "bg-amber-400",
-  dnd: "bg-rose-500",
-  offline: "bg-zinc-500",
-};
 
 export function StatusDot({ status }: { status: DiscordStatus }) {
   return (

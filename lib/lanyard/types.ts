@@ -24,6 +24,12 @@ export interface LanyardActivity {
   id: string;
   name: string;
   type: number;
+  state?: string;
+  emoji?: {
+    name: string;
+    id?: string;
+    animated?: boolean;
+  } | null;
 }
 
 export interface LanyardData {
