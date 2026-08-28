@@ -3,6 +3,7 @@ import type { LanyardSpotify } from "@/lib/lanyard/types";
 import { useSpotifyProgress } from "@/hooks/useSpotifyProgress";
 import { SpotifyIcon } from "@/components/social/icons";
 import { NowPlayingProgress } from "./NowPlayingProgress";
+import { EqualizerBars } from "./EqualizerBars";
 
 export function NowPlaying({ spotify }: { spotify: LanyardSpotify | null }) {
   const { elapsedMs, durationMs, progress } = useSpotifyProgress(spotify);
@@ -25,6 +26,7 @@ export function NowPlaying({ spotify }: { spotify: LanyardSpotify | null }) {
           <div className="flex items-center gap-1.5 text-[11px] font-medium text-emerald-400">
             <SpotifyIcon className="h-3 w-3" />
             <span>Ouvindo agora</span>
+            <EqualizerBars />
           </div>
           <p className="truncate text-sm font-medium text-white">{spotify.song}</p>
           <p className="truncate text-xs text-purple-300/70">{spotify.artist}</p>

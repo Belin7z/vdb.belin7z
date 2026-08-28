@@ -14,11 +14,20 @@ interface AvatarProps {
 
 export function Avatar({ user, status, connectionStatus, customStatus }: AvatarProps) {
   const decorationUrl = user ? getAvatarDecorationUrl(user) : null;
+  const isDormant = connectionStatus === "error";
 
   return (
     <div className="relative mx-auto h-28 w-28">
-      <div className="animate-glow-pulse absolute inset-0 rounded-full bg-purple-500 blur-xl" />
-      <div className="relative h-full w-full overflow-hidden rounded-full border-2 border-purple-300/40 bg-purple-950">
+      <div
+        className={`absolute inset-0 rounded-full bg-purple-500 blur-xl ${
+          isDormant ? "opacity-20" : "animate-glow-pulse"
+        }`}
+      />
+      <div
+        className={`relative h-full w-full overflow-hidden rounded-full border-2 bg-purple-950 ${
+          isDormant ? "border-purple-300/15 grayscale" : "border-purple-300/40"
+        }`}
+      >
         {user ? (
           <Image
             src={getDiscordAvatarUrl(user)}

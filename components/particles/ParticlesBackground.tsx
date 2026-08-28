@@ -5,6 +5,7 @@ import Particles, { ParticlesProvider } from "@tsparticles/react";
 import type { Engine } from "@tsparticles/engine";
 import { loadSlim } from "@tsparticles/slim";
 import { getParticlesOptions } from "./particles.config";
+import { CursorGlow } from "./CursorGlow";
 
 async function initEngine(engine: Engine) {
   await loadSlim(engine);
@@ -25,6 +26,7 @@ export function ParticlesBackground() {
   return (
     <div className="fixed inset-0 -z-10">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(124,58,237,0.35),transparent_60%)]" />
+      <CursorGlow />
       <ParticlesProvider init={initEngine}>
         <Particles
           id="belin7z-particles"
