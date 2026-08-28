@@ -7,6 +7,12 @@ export interface LanyardPrimaryGuild {
   badge: string | null;
 }
 
+export interface LanyardDisplayNameStyles {
+  colors: number[];
+  effect_id?: number;
+  font_id?: number;
+}
+
 export interface LanyardDiscordUser {
   id: string;
   username: string;
@@ -15,6 +21,7 @@ export interface LanyardDiscordUser {
   avatar: string | null;
   public_flags?: number;
   primary_guild?: LanyardPrimaryGuild | null;
+  display_name_styles?: LanyardDisplayNameStyles | null;
 }
 
 export interface LanyardSpotify {

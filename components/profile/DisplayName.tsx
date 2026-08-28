@@ -1,4 +1,5 @@
 import { SITE } from "@/config/site";
+import { getDisplayNameStyle } from "@/lib/lanyard/name-style";
 import type { LanyardDiscordUser } from "@/lib/lanyard/types";
 import type { LanyardStatus } from "@/hooks/useLanyard";
 
@@ -11,7 +12,10 @@ export function DisplayName({ user, connectionStatus }: DisplayNameProps) {
   if (user) {
     return (
       <div className="mt-4 text-center">
-        <h1 className="font-display text-2xl font-semibold tracking-tight text-white">
+        <h1
+          className="font-display text-2xl font-semibold tracking-tight text-white"
+          style={getDisplayNameStyle(user.display_name_styles)}
+        >
           {user.global_name ?? user.username}
         </h1>
         <p className="text-sm text-purple-300/70">@{user.username}</p>

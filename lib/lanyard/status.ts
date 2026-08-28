@@ -2,13 +2,6 @@ import type { DiscordStatus, LanyardActivity } from "./types";
 
 const CUSTOM_STATUS_ACTIVITY_TYPE = 4;
 
-export const STATUS_COLOR: Record<DiscordStatus, string> = {
-  online: "bg-emerald-500",
-  idle: "bg-amber-400",
-  dnd: "bg-rose-500",
-  offline: "bg-zinc-500",
-};
-
 export const STATUS_LABEL: Record<DiscordStatus, string> = {
   online: "Online",
   idle: "Ausente",

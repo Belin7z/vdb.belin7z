@@ -3,14 +3,16 @@ import { getDiscordAvatarUrl } from "@/lib/lanyard/avatar";
 import type { LanyardDiscordUser, DiscordStatus } from "@/lib/lanyard/types";
 import type { LanyardStatus } from "@/hooks/useLanyard";
 import { StatusDot } from "./StatusDot";
+import { CustomStatusBubble } from "./CustomStatusBubble";
 
 interface AvatarProps {
   user: LanyardDiscordUser | null;
   status: DiscordStatus;
   connectionStatus: LanyardStatus;
+  customStatus?: string | null;
 }
 
-export function Avatar({ user, status, connectionStatus }: AvatarProps) {
+export function Avatar({ user, status, connectionStatus, customStatus }: AvatarProps) {
   return (
     <div className="relative mx-auto h-28 w-28">
       <div className="animate-glow-pulse absolute inset-0 rounded-full bg-purple-500 blur-xl" />
@@ -35,6 +37,7 @@ export function Avatar({ user, status, connectionStatus }: AvatarProps) {
         )}
       </div>
       {user && <StatusDot status={status} />}
+      {user && <CustomStatusBubble text={customStatus ?? null} />}
     </div>
   );
 }
