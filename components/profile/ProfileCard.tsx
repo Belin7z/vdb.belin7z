@@ -2,13 +2,18 @@
 
 import { DISCORD_ID } from "@/config/site";
 import { useLanyard } from "@/hooks/useLanyard";
+import type { LanyardData } from "@/lib/lanyard/types";
 import { SocialLinks } from "@/components/social/SocialLinks";
 import { NowPlaying } from "@/components/spotify/NowPlaying";
 import { Avatar } from "./Avatar";
 import { DisplayName } from "./DisplayName";
 
-export function ProfileCard() {
-  const { data } = useLanyard(DISCORD_ID);
+interface ProfileCardProps {
+  initialData?: LanyardData | null;
+}
+
+export function ProfileCard({ initialData = null }: ProfileCardProps) {
+  const { data } = useLanyard(DISCORD_ID, initialData);
 
   return (
     <div className="animate-float relative w-full max-w-sm">

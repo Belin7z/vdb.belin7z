@@ -6,11 +6,15 @@ import type { LanyardData } from "@/lib/lanyard/types";
 
 export type LanyardStatus = "loading" | "ready" | "error";
 
-export function useLanyard(discordId: string) {
-  const [data, setData] = useState<LanyardData | null>(null);
-  const [status, setStatus] = useState<LanyardStatus>(() =>
-    discordId ? "loading" : "error"
-  );
+export function useLanyard(
+  discordId: string,
+  initialData: LanyardData | null = null
+) {
+  const [data, setData] = useState<LanyardData | null>(initialData);
+  const [status, setStatus] = useState<LanyardStatus>(() => {
+    if (initialData) return "ready";
+    return discordId ? "loading" : "error";
+  });
 
   useEffect(() => {
     if (!discordId) return;

@@ -20,6 +20,7 @@ export function Avatar({ user, status }: AvatarProps) {
             fill
             sizes="112px"
             className="object-cover"
+            priority
           />
         ) : (
           <div className="skeleton-shimmer h-full w-full" />
