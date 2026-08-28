@@ -3,6 +3,7 @@ import { getDisplayNameStyle } from "@/lib/lanyard/name-style";
 import type { LanyardDiscordUser } from "@/lib/lanyard/types";
 import type { LanyardStatus } from "@/hooks/useLanyard";
 import { CopyableUsername } from "./CopyableUsername";
+import { ServerTag } from "./badges/ServerTag";
 
 interface DisplayNameProps {
   user: LanyardDiscordUser | null;
@@ -19,7 +20,10 @@ export function DisplayName({ user, connectionStatus }: DisplayNameProps) {
         >
           {user.global_name ?? user.username}
         </h1>
-        <CopyableUsername username={user.username} />
+        <div className="mt-0.5 flex items-center justify-center gap-1.5">
+          <CopyableUsername username={user.username} />
+          <ServerTag primaryGuild={user.primary_guild} />
+        </div>
       </div>
     );
   }

@@ -14,11 +14,9 @@ export function ServerTag({
       : null;
 
   return (
-    <div className="mt-1.5 flex justify-center">
-      <span className="inline-flex items-center gap-1 rounded border border-white/10 bg-white/5 px-1.5 py-0.5 text-[11px] font-semibold text-purple-100">
-        {badgeUrl && <Image src={badgeUrl} alt="" width={14} height={14} unoptimized />}
-        {primaryGuild.tag}
-      </span>
-    </div>
+    <span className="inline-flex items-center gap-1 rounded border border-white/10 bg-white/5 px-1.5 py-0.5 text-[11px] font-semibold text-purple-100">
+      {badgeUrl && <Image src={badgeUrl} alt="" width={14} height={14} unoptimized />}
+      {primaryGuild.tag}
+    </span>
   );
 }

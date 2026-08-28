@@ -10,7 +10,6 @@ import { CurrentActivity } from "@/components/profile/activity/CurrentActivity";
 import { Avatar } from "./Avatar";
 import { DisplayName } from "./DisplayName";
 import { Badges } from "./badges/Badges";
-import { ServerTag } from "./badges/ServerTag";
 
 interface ProfileCardProps {
   initialData?: LanyardData | null;
@@ -31,7 +30,6 @@ export function ProfileCard({ initialData = null }: ProfileCardProps) {
             customStatus={data ? getCustomStatus(data.activities) : null}
           />
           <DisplayName user={data?.discord_user ?? null} connectionStatus={status} />
-          {data && <ServerTag primaryGuild={data.discord_user.primary_guild} />}
           <Badges />
           {data?.listening_to_spotify ? (
             <NowPlaying spotify={data.spotify} />
