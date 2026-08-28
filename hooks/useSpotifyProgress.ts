@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import type { LanyardSpotify } from "@/lib/lanyard/types";
 
 export function useSpotifyProgress(spotify: LanyardSpotify | null) {
-  const [now, setNow] = useState(() => Date.now());
+  const [now, setNow] = useState<number | null>(null);
 
   useEffect(() => {
     if (!spotify) return;
@@ -19,7 +19,10 @@ export function useSpotifyProgress(spotify: LanyardSpotify | null) {
 
   const { start, end } = spotify.timestamps;
   const durationMs = end - start;
-  const elapsedMs = Math.min(Math.max(now - start, 0), durationMs);
+  // `now` is null on the server and on the very first client render (before
+  // effects run), so both agree on elapsed = 0 there and avoid a hydration
+  // mismatch; the real elapsed time kicks in a moment later via the effect.
+  const elapsedMs = Math.min(Math.max((now ?? start) - start, 0), durationMs);
   const progress = durationMs > 0 ? elapsedMs / durationMs : 0;
 
   return { elapsedMs, durationMs, progress };
