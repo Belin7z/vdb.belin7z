@@ -2,6 +2,7 @@ import { SITE } from "@/config/site";
 import { getDisplayNameStyle } from "@/lib/lanyard/name-style";
 import type { LanyardDiscordUser } from "@/lib/lanyard/types";
 import type { LanyardStatus } from "@/hooks/useLanyard";
+import { CopyableUsername } from "./CopyableUsername";
 
 interface DisplayNameProps {
   user: LanyardDiscordUser | null;
@@ -18,7 +19,7 @@ export function DisplayName({ user, connectionStatus }: DisplayNameProps) {
         >
           {user.global_name ?? user.username}
         </h1>
-        <p className="text-sm text-purple-300/70">@{user.username}</p>
+        <CopyableUsername username={user.username} />
       </div>
     );
   }

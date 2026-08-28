@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { getDiscordAvatarUrl } from "@/lib/lanyard/avatar";
+import { getDiscordAvatarUrl, getAvatarDecorationUrl } from "@/lib/lanyard/avatar";
 import type { LanyardDiscordUser, DiscordStatus } from "@/lib/lanyard/types";
 import type { LanyardStatus } from "@/hooks/useLanyard";
 import { StatusDot } from "./StatusDot";
@@ -13,6 +13,8 @@ interface AvatarProps {
 }
 
 export function Avatar({ user, status, connectionStatus, customStatus }: AvatarProps) {
+  const decorationUrl = user ? getAvatarDecorationUrl(user) : null;
+
   return (
     <div className="relative mx-auto h-28 w-28">
       <div className="animate-glow-pulse absolute inset-0 rounded-full bg-purple-500 blur-xl" />
@@ -36,6 +38,11 @@ export function Avatar({ user, status, connectionStatus, customStatus }: AvatarP
           <div className="skeleton-shimmer h-full w-full" />
         )}
       </div>
+      {decorationUrl && (
+        <div className="pointer-events-none absolute -inset-3">
+          <Image src={decorationUrl} alt="" fill sizes="136px" unoptimized />
+        </div>
+      )}
       {user && <StatusDot status={status} />}
       {user && <CustomStatusBubble text={customStatus ?? null} />}
     </div>

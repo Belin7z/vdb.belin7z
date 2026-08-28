@@ -6,6 +6,7 @@ import { getCustomStatus } from "@/lib/lanyard/status";
 import type { LanyardData } from "@/lib/lanyard/types";
 import { SocialLinks } from "@/components/social/SocialLinks";
 import { NowPlaying } from "@/components/spotify/NowPlaying";
+import { CurrentActivity } from "@/components/profile/activity/CurrentActivity";
 import { Avatar } from "./Avatar";
 import { DisplayName } from "./DisplayName";
 import { Badges } from "./badges/Badges";
@@ -36,7 +37,11 @@ export function ProfileCard({ initialData = null }: ProfileCardProps) {
               <Badges publicFlags={data.discord_user.public_flags} />
             </>
           )}
-          <NowPlaying spotify={data?.spotify ?? null} />
+          {data?.listening_to_spotify ? (
+            <NowPlaying spotify={data.spotify} />
+          ) : (
+            <CurrentActivity activities={data?.activities ?? []} />
+          )}
         </div>
       </div>
       <div className="mt-6">

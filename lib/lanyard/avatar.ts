@@ -13,3 +13,10 @@ export function getDiscordAvatarUrl(user: LanyardDiscordUser): string {
 
   return `https://cdn.discordapp.com/embed/avatars/${fallbackIndex}.png`;
 }
+
+export function getAvatarDecorationUrl(user: LanyardDiscordUser): string | null {
+  const asset = user.avatar_decoration_data?.asset;
+  return asset
+    ? `https://cdn.discordapp.com/avatar-decoration-presets/${asset}.png?size=160`
+    : null;
+}

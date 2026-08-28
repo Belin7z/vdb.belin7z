@@ -22,6 +22,10 @@ export interface LanyardDiscordUser {
   public_flags?: number;
   primary_guild?: LanyardPrimaryGuild | null;
   display_name_styles?: LanyardDisplayNameStyles | null;
+  avatar_decoration_data?: {
+    asset: string;
+    sku_id?: string;
+  } | null;
 }
 
 export interface LanyardSpotify {
@@ -41,11 +45,23 @@ export interface LanyardActivity {
   name: string;
   type: number;
   state?: string;
+  details?: string;
+  application_id?: string;
   emoji?: {
     name: string;
     id?: string;
     animated?: boolean;
   } | null;
+  assets?: {
+    large_image?: string;
+    large_text?: string;
+    small_image?: string;
+    small_text?: string;
+  };
+  timestamps?: {
+    start?: number;
+    end?: number;
+  };
 }
 
 export interface LanyardData {

@@ -112,3 +112,26 @@ body {
   background-size: 800px 100%;
   animation: shimmer 1.6s linear infinite;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-glow-pulse,
+  .animate-border-flow,
+  .animate-status-ping,
+  .skeleton-shimmer {
+    animation: none;
+  }
+
+  .animate-card-enter {
+    animation: fade-in 0.3s ease-out both;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
