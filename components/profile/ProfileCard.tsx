@@ -17,9 +17,7 @@ import { Badges } from "./badges/Badges";
 import { TiltCard } from "./TiltCard";
 import { AccountAge } from "./AccountAge";
 import { GithubStatsRow } from "./GithubStatsRow";
-import { ShareButton } from "./actions/ShareButton";
-import { DownloadCardButton } from "./actions/DownloadCardButton";
-import { QRCodeButton } from "./actions/QRCodeButton";
+import { CardMenu } from "./actions/CardMenu";
 
 const EGG_DURATION_MS = 6000;
 
@@ -59,6 +57,7 @@ export function ProfileCard({
             className="relative rounded-3xl border border-white/10 bg-[#0d0420]/90 p-8 shadow-[0_20px_60px_rgba(88,28,135,0.45)] backdrop-blur-xl"
           >
             <div className="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br from-white/[0.08] via-transparent to-transparent" />
+            <CardMenu qrCodeSvg={qrCodeSvg} />
             <Avatar
               user={data?.discord_user ?? null}
               status={data?.discord_status ?? "offline"}
@@ -77,13 +76,8 @@ export function ProfileCard({
           </div>
         </div>
       </TiltCard>
-      <div className="mt-6 flex flex-col items-center gap-3">
+      <div className="mt-6">
         <SocialLinks />
-        <div className="flex items-center gap-3">
-          <ShareButton />
-          <DownloadCardButton />
-          <QRCodeButton svg={qrCodeSvg} />
-        </div>
       </div>
     </div>
   );

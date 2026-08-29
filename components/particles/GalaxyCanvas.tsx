@@ -5,7 +5,6 @@ import { generateStars, generateNebulae, type Star } from "@/lib/galaxy/star-fie
 
 const STAR_COUNT = 220;
 const ROTATION_PERIOD_MS = 240000;
-const PARALLAX_STRENGTH = 18;
 const DISK_SQUASH = 0.55;
 const SHOOTING_STAR_CHANCE_PER_FRAME = 0.006;
 
@@ -46,14 +45,6 @@ export function GalaxyCanvas() {
     const nebulae = generateNebulae(4);
     const shootingStars: ShootingStar[] = [];
 
-    let mouseX = 0;
-    let mouseY = 0;
-    function handleMouseMove(event: MouseEvent) {
-      mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-      mouseY = (event.clientY / window.innerHeight) * 2 - 1;
-    }
-    if (!reducedMotion) window.addEventListener("mousemove", handleMouseMove);
-
     function drawSparkle(x: number, y: number, size: number, opacity: number, color: string) {
       ctx!.save();
       ctx!.translate(x, y);
@@ -85,10 +76,8 @@ export function GalaxyCanvas() {
     function drawStar(star: Star, elapsed: number, rotation: number, centerX: number, centerY: number, maxRadius: number) {
       const angle = star.angle + rotation;
       const r = star.radius * maxRadius;
-      const baseX = centerX + Math.cos(angle) * r;
-      const baseY = centerY + Math.sin(angle) * r * DISK_SQUASH;
-      const x = baseX + mouseX * star.depth * PARALLAX_STRENGTH;
-      const y = baseY + mouseY * star.depth * PARALLAX_STRENGTH;
+      const x = centerX + Math.cos(angle) * r;
+      const y = centerY + Math.sin(angle) * r * DISK_SQUASH;
 
       const twinkle = reducedMotion
         ? 0.85
@@ -208,7 +197,6 @@ export function GalaxyCanvas() {
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", resize);
-      window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
 
