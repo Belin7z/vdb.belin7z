@@ -95,17 +95,32 @@ export function GalaxyCanvas() {
         ? 0.85
         : 0.5 + 0.5 * Math.sin(elapsed * 0.001 * star.twinkleSpeed + star.twinklePhase);
       const opacity = (0.25 + 0.6 * star.depth) * (0.5 + 0.5 * twinkle);
-      const size = star.size * (0.6 + star.depth * 0.8);
+      const pulse = reducedMotion ? 1 : 0.85 + 0.15 * twinkle;
+      const size = star.size * (0.6 + star.depth * 0.8) * pulse;
 
       if (star.isSparkle) {
         drawSparkle(x, y, size, opacity, star.color);
         return;
       }
 
+      const haloRadius = size * (2.4 + star.depth * 2.2);
+      const halo = ctx!.createRadialGradient(x, y, 0, x, y, haloRadius);
+      halo.addColorStop(0, withAlpha(star.color, opacity * 0.45));
+      halo.addColorStop(1, withAlpha(star.color, 0));
+      ctx!.globalAlpha = 1;
+      ctx!.fillStyle = halo;
+      ctx!.beginPath();
+      ctx!.arc(x, y, haloRadius, 0, Math.PI * 2);
+      ctx!.fill();
+
+      const core = ctx!.createRadialGradient(x, y, 0, x, y, size);
+      core.addColorStop(0, "#ffffff");
+      core.addColorStop(0.45, star.color);
+      core.addColorStop(1, withAlpha(star.color, 0));
+      ctx!.globalAlpha = opacity;
+      ctx!.fillStyle = core;
       ctx!.beginPath();
       ctx!.arc(x, y, size, 0, Math.PI * 2);
-      ctx!.fillStyle = star.color;
-      ctx!.globalAlpha = opacity;
       ctx!.fill();
     }
 
