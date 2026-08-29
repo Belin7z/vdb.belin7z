@@ -15,7 +15,7 @@ export default async function Home() {
   ]);
 
   return (
-    <main className="flex min-h-screen items-center justify-center px-4 py-16">
+    <main className="flex h-dvh items-center justify-center overflow-hidden px-4 py-6">
       <LazyGalaxyBackground />
       <ProfileCard initialData={initialData} githubStats={githubStats} qrCodeSvg={qrCodeSvg} />
     </main>

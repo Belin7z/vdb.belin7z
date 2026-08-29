@@ -6,6 +6,7 @@ export interface Star {
   twinklePhase: number;
   twinkleSpeed: number;
   color: string;
+  isSparkle: boolean;
 }
 
 export interface Nebula {
@@ -21,6 +22,8 @@ export interface Nebula {
 const SPIRAL_ARMS = 3;
 const SPIRAL_TURNS = 1.4;
 const BULGE_FRACTION = 0.22;
+const SPARKLE_DEPTH_THRESHOLD = 0.75;
+const SPARKLE_CHANCE = 0.4;
 
 const ARM_STAR_COLORS = ["#e9d5ff", "#c084fc", "#a855f7", "#f0abfc", "#93c5fd"];
 const BULGE_STAR_COLORS = ["#ffffff", "#fef3ff", "#e9d5ff", "#fde68a"];
@@ -36,6 +39,10 @@ function pickRandom<T>(items: T[]): T {
   return items[Math.floor(Math.random() * items.length)];
 }
 
+function isSparkle(depth: number): boolean {
+  return depth > SPARKLE_DEPTH_THRESHOLD && Math.random() < SPARKLE_CHANCE;
+}
+
 function generateBulgeStar(): Star {
   const radius = Math.pow(Math.random(), 2.2) * 0.22;
   const depth = 0.4 + Math.random() * 0.6;
@@ -48,6 +55,7 @@ function generateBulgeStar(): Star {
     twinklePhase: Math.random() * Math.PI * 2,
     twinkleSpeed: 0.4 + Math.random() * 1.3,
     color: pickRandom(BULGE_STAR_COLORS),
+    isSparkle: isSparkle(depth),
   };
 }
 
@@ -68,6 +76,7 @@ function generateArmStar(index: number): Star {
     twinklePhase: Math.random() * Math.PI * 2,
     twinkleSpeed: 0.4 + Math.random() * 1.3,
     color: pickRandom(ARM_STAR_COLORS),
+    isSparkle: isSparkle(depth),
   };
 }
 

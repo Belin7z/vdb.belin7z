@@ -54,6 +54,34 @@ export function GalaxyCanvas() {
     }
     if (!reducedMotion) window.addEventListener("mousemove", handleMouseMove);
 
+    function drawSparkle(x: number, y: number, size: number, opacity: number, color: string) {
+      ctx!.save();
+      ctx!.translate(x, y);
+      ctx!.globalAlpha = opacity;
+
+      const glow = ctx!.createRadialGradient(0, 0, 0, 0, 0, size * 3);
+      glow.addColorStop(0, color);
+      glow.addColorStop(1, "transparent");
+      ctx!.fillStyle = glow;
+      ctx!.fillRect(-size * 3, -size * 3, size * 6, size * 6);
+
+      ctx!.strokeStyle = "#ffffff";
+      ctx!.lineWidth = Math.max(0.6, size * 0.18);
+      ctx!.beginPath();
+      ctx!.moveTo(-size * 2.2, 0);
+      ctx!.lineTo(size * 2.2, 0);
+      ctx!.moveTo(0, -size * 2.2);
+      ctx!.lineTo(0, size * 2.2);
+      ctx!.stroke();
+
+      ctx!.beginPath();
+      ctx!.arc(0, 0, size * 0.7, 0, Math.PI * 2);
+      ctx!.fillStyle = "#ffffff";
+      ctx!.fill();
+
+      ctx!.restore();
+    }
+
     function drawStar(star: Star, elapsed: number, rotation: number, centerX: number, centerY: number, maxRadius: number) {
       const angle = star.angle + rotation;
       const r = star.radius * maxRadius;
@@ -66,9 +94,15 @@ export function GalaxyCanvas() {
         ? 0.85
         : 0.5 + 0.5 * Math.sin(elapsed * 0.001 * star.twinkleSpeed + star.twinklePhase);
       const opacity = (0.25 + 0.6 * star.depth) * (0.5 + 0.5 * twinkle);
+      const size = star.size * (0.6 + star.depth * 0.8);
+
+      if (star.isSparkle) {
+        drawSparkle(x, y, size, opacity, star.color);
+        return;
+      }
 
       ctx!.beginPath();
-      ctx!.arc(x, y, star.size * (0.6 + star.depth * 0.8), 0, Math.PI * 2);
+      ctx!.arc(x, y, size, 0, Math.PI * 2);
       ctx!.fillStyle = star.color;
       ctx!.globalAlpha = opacity;
       ctx!.fill();

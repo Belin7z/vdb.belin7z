@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Sora } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { DevToolsGuard } from "@/components/DevToolsGuard";
 import { SITE } from "@/config/site";
 import "./globals.css";
 
@@ -44,6 +45,7 @@ export default function RootLayout({
       <body className={`${inter.variable} ${sora.variable} antialiased`}>
         {children}
         <Analytics />
+        <DevToolsGuard />
       </body>
     </html>
   );
