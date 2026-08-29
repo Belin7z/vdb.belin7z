@@ -45,7 +45,7 @@ export function CardMenu({ qrCodeSvg }: { qrCodeSvg: string }) {
         aria-label="Mais opções"
         aria-haspopup="menu"
         aria-expanded={isMenuOpen}
-        className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-purple-200 backdrop-blur-sm transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-300/70"
+        className="flex h-8 w-8 items-center justify-center rounded-full border border-purple-400/30 bg-[#150733] text-purple-200 shadow-[0_4px_14px_rgba(0,0,0,0.45)] transition-all duration-200 hover:border-purple-300/60 hover:bg-[#1d0a44] hover:text-white hover:shadow-[0_4px_18px_rgba(168,85,247,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-300/70"
       >
         <DotsIcon className="h-4 w-4" />
       </button>
@@ -53,7 +53,7 @@ export function CardMenu({ qrCodeSvg }: { qrCodeSvg: string }) {
       {isMenuOpen && (
         <div
           role="menu"
-          className="absolute right-0 top-11 w-48 rounded-2xl border border-purple-400/20 bg-[#0d0420]/95 p-1.5 shadow-[0_10px_40px_rgba(88,28,135,0.5)] backdrop-blur-xl"
+          className="absolute right-0 top-10 w-48 rounded-2xl border border-purple-400/20 bg-[#0d0420] p-1.5 shadow-[0_10px_40px_rgba(88,28,135,0.5)]"
         >
           <button
             type="button"
