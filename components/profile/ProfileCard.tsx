@@ -11,6 +11,9 @@ import { Avatar } from "./Avatar";
 import { DisplayName } from "./DisplayName";
 import { Badges } from "./badges/Badges";
 import { TiltCard } from "./TiltCard";
+import { AccountAge } from "./AccountAge";
+import { ShareButton } from "./actions/ShareButton";
+import { DownloadCardButton } from "./actions/DownloadCardButton";
 
 interface ProfileCardProps {
   initialData?: LanyardData | null;
@@ -24,7 +27,10 @@ export function ProfileCard({ initialData = null }: ProfileCardProps) {
       <TiltCard>
         <div className="animate-float relative w-full">
           <div className="animate-border-flow absolute -inset-[1.5px] rounded-3xl bg-gradient-to-r from-fuchsia-500 via-purple-500 to-violet-500 opacity-60 blur-[2px]" />
-          <div className="relative rounded-3xl border border-white/10 bg-[#0d0420]/90 p-8 shadow-[0_20px_60px_rgba(88,28,135,0.45)] backdrop-blur-xl">
+          <div
+            id="belin7z-profile-card"
+            className="relative rounded-3xl border border-white/10 bg-[#0d0420]/90 p-8 shadow-[0_20px_60px_rgba(88,28,135,0.45)] backdrop-blur-xl"
+          >
             <div className="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br from-white/[0.08] via-transparent to-transparent" />
             <Avatar
               user={data?.discord_user ?? null}
@@ -34,6 +40,7 @@ export function ProfileCard({ initialData = null }: ProfileCardProps) {
             />
             <DisplayName user={data?.discord_user ?? null} connectionStatus={status} />
             <Badges />
+            {data && <AccountAge discordId={data.discord_user.id} />}
             {data?.listening_to_spotify ? (
               <NowPlaying spotify={data.spotify} />
             ) : (
@@ -42,8 +49,12 @@ export function ProfileCard({ initialData = null }: ProfileCardProps) {
           </div>
         </div>
       </TiltCard>
-      <div className="mt-6">
+      <div className="mt-6 flex flex-col items-center gap-3">
         <SocialLinks />
+        <div className="flex items-center gap-3">
+          <ShareButton />
+          <DownloadCardButton />
+        </div>
       </div>
     </div>
   );

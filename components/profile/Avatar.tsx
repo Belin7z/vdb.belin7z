@@ -4,6 +4,7 @@ import type { LanyardDiscordUser, DiscordStatus } from "@/lib/lanyard/types";
 import type { LanyardStatus } from "@/hooks/useLanyard";
 import { StatusDot } from "./StatusDot";
 import { CustomStatusBubble } from "./CustomStatusBubble";
+import { useParticleBurst, ParticleBurstLayer } from "./ParticleBurst";
 
 interface AvatarProps {
   user: LanyardDiscordUser | null;
@@ -15,9 +16,13 @@ interface AvatarProps {
 export function Avatar({ user, status, connectionStatus, customStatus }: AvatarProps) {
   const decorationUrl = user ? getAvatarDecorationUrl(user) : null;
   const isDormant = connectionStatus === "error";
+  const { burst, trigger } = useParticleBurst();
 
   return (
-    <div className="relative mx-auto h-28 w-28">
+    <div
+      className={`relative mx-auto h-28 w-28 select-none ${user ? "cursor-pointer" : ""}`}
+      onClick={user ? trigger : undefined}
+    >
       <div
         className={`absolute inset-0 rounded-full bg-purple-500 blur-xl ${
           isDormant ? "opacity-20" : "animate-glow-pulse"
@@ -54,6 +59,7 @@ export function Avatar({ user, status, connectionStatus, customStatus }: AvatarP
       )}
       {user && <StatusDot status={status} />}
       {user && <CustomStatusBubble text={customStatus ?? null} />}
+      <ParticleBurstLayer burst={burst} />
     </div>
   );
 }
