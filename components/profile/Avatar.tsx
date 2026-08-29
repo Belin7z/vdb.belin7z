@@ -40,7 +40,7 @@ export function Avatar({ user, status, connectionStatus, customStatus }: AvatarP
     >
       <div
         className={`absolute inset-0 rounded-full bg-purple-500 blur-xl ${
-          isDormant ? "opacity-20" : "animate-glow-pulse"
+          isDormant ? "opacity-20" : "opacity-50"
         }`}
       />
       <div

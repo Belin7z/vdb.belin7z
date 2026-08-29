@@ -2,7 +2,7 @@ import { DISCORD_ID, GITHUB_USERNAME } from "@/config/site";
 import { getInitialPresence } from "@/lib/lanyard/rest";
 import { getGithubStats } from "@/lib/github/stats";
 import { getProfileQrSvg } from "@/lib/qrcode";
-import { LazyParticlesBackground } from "@/components/particles/LazyParticlesBackground";
+import { LazyGalaxyBackground } from "@/components/particles/LazyGalaxyBackground";
 import { ProfileCard } from "@/components/profile/ProfileCard";
 
 export const dynamic = "force-dynamic";
@@ -16,7 +16,7 @@ export default async function Home() {
 
   return (
     <main className="flex min-h-screen items-center justify-center px-4 py-16">
-      <LazyParticlesBackground />
+      <LazyGalaxyBackground />
       <ProfileCard initialData={initialData} githubStats={githubStats} qrCodeSvg={qrCodeSvg} />
     </main>
   );
