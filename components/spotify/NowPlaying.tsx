@@ -11,7 +11,7 @@ export function NowPlaying({ spotify }: { spotify: LanyardSpotify | null }) {
   if (!spotify) return null;
 
   return (
-    <div className="mt-6 w-full rounded-2xl border border-purple-400/20 bg-white/5 p-3 backdrop-blur-sm">
+    <div className="mt-6 w-full rounded-2xl border border-purple-400/20 bg-white/[0.06] p-3">
       <div className="flex items-center gap-3">
         <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg">
           <Image

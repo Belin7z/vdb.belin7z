@@ -14,7 +14,7 @@ export function CurrentActivity({ activities }: { activities: LanyardActivity[] 
   const imageUrl = getActivityAssetUrl(activity.application_id, activity.assets?.large_image);
 
   return (
-    <div className="mt-3 w-full rounded-2xl border border-purple-400/20 bg-white/5 p-3 backdrop-blur-sm">
+    <div className="mt-3 w-full rounded-2xl border border-purple-400/20 bg-white/[0.06] p-3">
       <div className="flex items-center gap-3">
         {imageUrl && (
           <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg">

@@ -6,15 +6,27 @@ import { generateStars, generateNebulae, type Star } from "@/lib/galaxy/star-fie
 const STAR_COUNT = 220;
 const ROTATION_PERIOD_MS = 240000;
 const DISK_SQUASH = 0.55;
-const SHOOTING_STAR_CHANCE_PER_FRAME = 0.006;
+const COMET_CHANCE_PER_FRAME = 0.018;
+const COMET_COLORS = ["#ffffff", "#e9d5ff", "#c084fc", "#93c5fd", "#f0abfc"];
 
-interface ShootingStar {
+interface Comet {
   x: number;
   y: number;
   angle: number;
   speed: number;
+  curve: number;
   life: number;
   length: number;
+  size: number;
+  color: string;
+}
+
+function withAlpha(hex: string, alpha: number): string {
+  const value = hex.replace("#", "");
+  const r = parseInt(value.substring(0, 2), 16);
+  const g = parseInt(value.substring(2, 4), 16);
+  const b = parseInt(value.substring(4, 6), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
 export function GalaxyCanvas() {
@@ -43,7 +55,7 @@ export function GalaxyCanvas() {
 
     const stars = generateStars(STAR_COUNT);
     const nebulae = generateNebulae(4);
-    const shootingStars: ShootingStar[] = [];
+    const comets: Comet[] = [];
 
     function drawSparkle(x: number, y: number, size: number, opacity: number, color: string) {
       ctx!.save();
@@ -129,43 +141,71 @@ export function GalaxyCanvas() {
       }
     }
 
-    function spawnShootingStar() {
-      const fromLeft = Math.random() > 0.5;
-      shootingStars.push({
-        x: fromLeft ? -0.05 * width : width * (0.6 + Math.random() * 0.4),
-        y: height * Math.random() * 0.5,
-        angle: fromLeft ? 0.5 : Math.PI - 0.5,
-        speed: 9 + Math.random() * 6,
+    function spawnComet() {
+      comets.push({
+        x: width * Math.random(),
+        y: -0.05 * height,
+        angle: Math.PI / 4 + Math.random() * (Math.PI / 4),
+        speed: 7 + Math.random() * 9,
+        curve: (Math.random() - 0.5) * 0.018,
         life: 1,
-        length: 90 + Math.random() * 60,
+        length: 70 + Math.random() * 100,
+        size: 1.3 + Math.random() * 2.2,
+        color: COMET_COLORS[Math.floor(Math.random() * COMET_COLORS.length)],
       });
     }
 
-    function drawShootingStars() {
-      for (let i = shootingStars.length - 1; i >= 0; i--) {
-        const shootingStar = shootingStars[i];
-        shootingStar.x += Math.cos(shootingStar.angle) * shootingStar.speed;
-        shootingStar.y += Math.sin(shootingStar.angle) * shootingStar.speed;
-        shootingStar.life -= 0.02;
+    function drawComets() {
+      for (let i = comets.length - 1; i >= 0; i--) {
+        const comet = comets[i];
+        comet.angle += comet.curve;
+        comet.x += Math.cos(comet.angle) * comet.speed;
+        comet.y += Math.sin(comet.angle) * comet.speed;
+        comet.life -= 0.012;
 
-        if (shootingStar.life <= 0) {
-          shootingStars.splice(i, 1);
+        const offScreen =
+          comet.y > height + 60 || comet.x < -60 || comet.x > width + 60;
+        if (comet.life <= 0 || offScreen) {
+          comets.splice(i, 1);
           continue;
         }
 
-        const tailX = shootingStar.x - Math.cos(shootingStar.angle) * shootingStar.length;
-        const tailY = shootingStar.y - Math.sin(shootingStar.angle) * shootingStar.length;
-        const gradient = ctx!.createLinearGradient(shootingStar.x, shootingStar.y, tailX, tailY);
-        gradient.addColorStop(0, `rgba(255,255,255,${shootingStar.life})`);
-        gradient.addColorStop(1, "rgba(192,132,252,0)");
+        const progress = 1 - comet.life;
+        const depthCurve = Math.sin(Math.min(progress, 1) * Math.PI);
+        const headSize = comet.size * (0.4 + depthCurve * 1.4);
+        const tailLength = comet.length * (0.5 + depthCurve * 0.8);
+        const opacity = comet.life * (0.4 + depthCurve * 0.6);
+
+        const tailX = comet.x - Math.cos(comet.angle) * tailLength;
+        const tailY = comet.y - Math.sin(comet.angle) * tailLength;
+
+        const tailGradient = ctx!.createLinearGradient(comet.x, comet.y, tailX, tailY);
+        tailGradient.addColorStop(0, withAlpha("#ffffff", opacity));
+        tailGradient.addColorStop(0.4, withAlpha(comet.color, opacity * 0.55));
+        tailGradient.addColorStop(1, withAlpha(comet.color, 0));
 
         ctx!.globalAlpha = 1;
-        ctx!.strokeStyle = gradient;
-        ctx!.lineWidth = 1.5;
+        ctx!.strokeStyle = tailGradient;
+        ctx!.lineWidth = Math.max(0.8, headSize * 0.8);
+        ctx!.lineCap = "round";
         ctx!.beginPath();
-        ctx!.moveTo(shootingStar.x, shootingStar.y);
+        ctx!.moveTo(comet.x, comet.y);
         ctx!.lineTo(tailX, tailY);
         ctx!.stroke();
+
+        const glow = ctx!.createRadialGradient(comet.x, comet.y, 0, comet.x, comet.y, headSize * 3.2);
+        glow.addColorStop(0, withAlpha(comet.color, opacity));
+        glow.addColorStop(1, withAlpha(comet.color, 0));
+        ctx!.fillStyle = glow;
+        ctx!.beginPath();
+        ctx!.arc(comet.x, comet.y, headSize * 3.2, 0, Math.PI * 2);
+        ctx!.fill();
+
+        ctx!.beginPath();
+        ctx!.arc(comet.x, comet.y, headSize * 0.75, 0, Math.PI * 2);
+        ctx!.fillStyle = "#ffffff";
+        ctx!.globalAlpha = opacity;
+        ctx!.fill();
       }
     }
 
@@ -186,8 +226,8 @@ export function GalaxyCanvas() {
       ctx!.globalAlpha = 1;
 
       if (!reducedMotion) {
-        if (Math.random() < SHOOTING_STAR_CHANCE_PER_FRAME) spawnShootingStar();
-        drawShootingStars();
+        if (Math.random() < COMET_CHANCE_PER_FRAME) spawnComet();
+        drawComets();
         rafId = requestAnimationFrame(render);
       }
     }

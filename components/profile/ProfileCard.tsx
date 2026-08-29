@@ -54,7 +54,7 @@ export function ProfileCard({
           />
           <div
             id="belin7z-profile-card"
-            className="relative rounded-3xl border border-white/10 bg-[#0d0420]/90 p-8 shadow-[0_20px_60px_rgba(88,28,135,0.45)] backdrop-blur-xl"
+            className="relative rounded-3xl border border-white/10 bg-[#0d0420]/95 p-8 shadow-[0_20px_60px_rgba(88,28,135,0.45)]"
           >
             <div className="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br from-white/[0.08] via-transparent to-transparent" />
             <CardMenu qrCodeSvg={qrCodeSvg} />
