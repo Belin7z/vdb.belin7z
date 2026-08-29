@@ -19,7 +19,8 @@ export function CopyableUsername({ username }: { username: string }) {
     <button
       type="button"
       onClick={handleCopy}
-      className="text-sm text-purple-300/70 transition-colors hover:text-purple-200"
+      aria-label={`Copiar usuário @${username}`}
+      className="rounded text-sm text-purple-300/70 transition-colors hover:text-purple-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-300/70"
     >
       {copied ? "Copiado!" : `@${username}`}
     </button>

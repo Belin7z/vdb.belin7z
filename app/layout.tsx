@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Sora } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SITE } from "@/config/site";
@@ -30,6 +30,10 @@ export const metadata: Metadata = {
     title: SITE.title,
     description: SITE.description,
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#05010f",
 };
 
 export default function RootLayout({

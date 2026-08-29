@@ -11,8 +11,10 @@ export const SITE = {
   url: "https://belin7z.vercel.app",
 } as const;
 
+export const GITHUB_USERNAME = "Belin7z";
+
 export const SOCIALS = {
-  github: "https://github.com/Belin7z",
+  github: `https://github.com/${GITHUB_USERNAME}`,
   instagram: "https://instagram.com/vdb.belin7z",
   discord: DISCORD_ID
     ? `https://discord.com/users/${DISCORD_ID}`
