@@ -3,7 +3,7 @@ interface Point {
   y: number;
 }
 
-type FlightMode = "flyby" | "approach" | "depart";
+type FlightMode = "flyby" | "approach" | "depart" | "orbit";
 
 interface TrailSample {
   x: number;
@@ -14,84 +14,149 @@ interface TrailSample {
   time: number;
 }
 
+interface BezierPath {
+  p0: Point;
+  p1: Point;
+  p2: Point;
+}
+
+interface OrbitPath {
+  centerX: number;
+  centerY: number;
+  radiusX: number;
+  radiusY: number;
+  startAngle: number;
+  direction: 1 | -1;
+  revolutions: number;
+}
+
 export interface ShipFlight {
   mode: FlightMode;
   startTime: number;
   duration: number;
-  p0: Point;
-  p1: Point;
-  p2: Point;
+  path?: BezierPath;
+  orbit?: OrbitPath;
   seed: number;
   trail: TrailSample[];
 }
 
 const TRAIL_LENGTH = 6;
 const TRAIL_SAMPLE_EVERY_MS = 45;
+const EDGE_FADE_FRACTION = 0.08;
 
-function bezierPoint(p0: Point, p1: Point, p2: Point, t: number): Point {
+function bezierPoint(path: BezierPath, t: number): Point {
   const mt = 1 - t;
   return {
-    x: mt * mt * p0.x + 2 * mt * t * p1.x + t * t * p2.x,
-    y: mt * mt * p0.y + 2 * mt * t * p1.y + t * t * p2.y,
+    x: mt * mt * path.p0.x + 2 * mt * t * path.p1.x + t * t * path.p2.x,
+    y: mt * mt * path.p0.y + 2 * mt * t * path.p1.y + t * t * path.p2.y,
   };
 }
 
-function bezierTangent(p0: Point, p1: Point, p2: Point, t: number): Point {
+function bezierTangent(path: BezierPath, t: number): Point {
   const mt = 1 - t;
   return {
-    x: 2 * mt * (p1.x - p0.x) + 2 * t * (p2.x - p1.x),
-    y: 2 * mt * (p1.y - p0.y) + 2 * t * (p2.y - p1.y),
+    x: 2 * mt * (path.p1.x - path.p0.x) + 2 * t * (path.p2.x - path.p1.x),
+    y: 2 * mt * (path.p1.y - path.p0.y) + 2 * t * (path.p2.y - path.p1.y),
   };
 }
 
 function pickMode(): FlightMode {
   const roll = Math.random();
-  if (roll < 0.45) return "flyby";
-  return roll < 0.725 ? "approach" : "depart";
+  if (roll < 0.55) return "orbit";
+  if (roll < 0.75) return "flyby";
+  return roll < 0.875 ? "approach" : "depart";
 }
 
 export function createShipFlight(width: number, height: number, now: number): ShipFlight {
   const mode = pickMode();
+  const seed = Math.random() * 1000;
+
+  if (mode === "orbit") {
+    const revolutions = 1.5 + Math.random() * 1.5;
+    const periodMs = 6500 + Math.random() * 3000;
+    const orbit: OrbitPath = {
+      centerX: width * (0.45 + Math.random() * 0.1),
+      centerY: height * (0.42 + Math.random() * 0.1),
+      radiusX: width * (0.32 + Math.random() * 0.1),
+      radiusY: height * (0.24 + Math.random() * 0.08),
+      startAngle: Math.random() * Math.PI * 2,
+      direction: Math.random() > 0.5 ? 1 : -1,
+      revolutions,
+    };
+    return { mode, startTime: now, duration: periodMs * revolutions, orbit, seed, trail: [] };
+  }
+
   const flipped = Math.random() > 0.5;
   const edgeY = height * (0.1 + Math.random() * 0.18);
   const farY = height * (0.15 + Math.random() * 0.15);
-
-  let p0: Point;
-  let p1: Point;
-  let p2: Point;
+  let path: BezierPath;
   let duration: number;
 
   if (mode === "approach") {
-    p0 = { x: width * (0.3 + Math.random() * 0.4), y: farY };
-    p1 = { x: width * (0.45 + Math.random() * 0.1), y: farY - height * 0.08 };
-    p2 = flipped
-      ? { x: -180, y: height * (0.55 + Math.random() * 0.2) }
-      : { x: width + 180, y: height * (0.55 + Math.random() * 0.2) };
+    path = {
+      p0: { x: width * (0.3 + Math.random() * 0.4), y: farY },
+      p1: { x: width * (0.45 + Math.random() * 0.1), y: farY - height * 0.08 },
+      p2: flipped
+        ? { x: -180, y: height * (0.55 + Math.random() * 0.2) }
+        : { x: width + 180, y: height * (0.55 + Math.random() * 0.2) },
+    };
     duration = 6500 + Math.random() * 2000;
   } else if (mode === "depart") {
-    p0 = flipped
-      ? { x: width + 180, y: height * (0.5 + Math.random() * 0.2) }
-      : { x: -180, y: height * (0.5 + Math.random() * 0.2) };
-    p1 = { x: width * (0.45 + Math.random() * 0.1), y: farY - height * 0.05 };
-    p2 = { x: width * (0.3 + Math.random() * 0.4), y: farY };
+    path = {
+      p0: flipped
+        ? { x: width + 180, y: height * (0.5 + Math.random() * 0.2) }
+        : { x: -180, y: height * (0.5 + Math.random() * 0.2) },
+      p1: { x: width * (0.45 + Math.random() * 0.1), y: farY - height * 0.05 },
+      p2: { x: width * (0.3 + Math.random() * 0.4), y: farY },
+    };
     duration = 6500 + Math.random() * 2000;
   } else {
     const startX = flipped ? width + 160 : -160;
     const endX = flipped ? -160 : width + 160;
     const midY = Math.min(edgeY, farY) - height * (0.06 + Math.random() * 0.08);
-    p0 = { x: startX, y: edgeY };
-    p1 = { x: width / 2, y: midY };
-    p2 = { x: endX, y: farY };
+    path = { p0: { x: startX, y: edgeY }, p1: { x: width / 2, y: midY }, p2: { x: endX, y: farY } };
     duration = 10000 + Math.random() * 4000;
   }
 
-  return { mode, startTime: now, duration, p0, p1, p2, seed: Math.random() * 1000, trail: [] };
+  return { mode, startTime: now, duration, path, seed, trail: [] };
 }
 
-function depthCurveFor(mode: FlightMode, t: number): number {
-  if (mode === "approach") return Math.pow(Math.min(t, 1), 1.3);
-  if (mode === "depart") return Math.pow(1 - Math.min(t, 1), 1.3);
-  return Math.sin(Math.min(t, 1) * Math.PI);
+interface Pose {
+  x: number;
+  y: number;
+  angle: number;
+  depthCurve: number;
+  edgeFade: number;
+}
+
+function getPose(flight: ShipFlight, t: number): Pose {
+  const edgeFade = Math.max(0, Math.min(1, t / EDGE_FADE_FRACTION, (1 - t) / EDGE_FADE_FRACTION));
+
+  if (flight.mode === "orbit" && flight.orbit) {
+    const orbit = flight.orbit;
+    const angle = orbit.startAngle + orbit.direction * t * orbit.revolutions * Math.PI * 2;
+    const x = orbit.centerX + Math.cos(angle) * orbit.radiusX;
+    const y = orbit.centerY + Math.sin(angle) * orbit.radiusY;
+    const heading = Math.atan2(
+      Math.cos(angle) * orbit.radiusY * orbit.direction,
+      -Math.sin(angle) * orbit.radiusX * orbit.direction
+    );
+    const depthCurve = 0.5 + 0.5 * Math.sin(angle);
+    return { x, y, angle: heading, depthCurve, edgeFade };
+  }
+
+  const path = flight.path!;
+  const pos = bezierPoint(path, t);
+  const tangent = bezierTangent(path, t);
+  const angle = Math.atan2(tangent.y, tangent.x);
+  const depthCurve =
+    flight.mode === "approach"
+      ? Math.pow(t, 1.3)
+      : flight.mode === "depart"
+        ? Math.pow(1 - t, 1.3)
+        : Math.sin(t * Math.PI);
+
+  return { x: pos.x, y: pos.y, angle, depthCurve, edgeFade: flight.mode === "flyby" ? 1 : edgeFade };
 }
 
 function withAlpha(hex: string, alpha: number): string {
@@ -149,12 +214,25 @@ function drawNavLights(ctx: CanvasRenderingContext2D, now: number, seed: number)
   ctx.fill();
 }
 
-function drawHull(ctx: CanvasRenderingContext2D) {
-  const bodyGradient = ctx.createLinearGradient(-0.58, 0, 0.58, 0);
-  bodyGradient.addColorStop(0, "#1c1a2b");
-  bodyGradient.addColorStop(0.5, "#5d5878");
-  bodyGradient.addColorStop(1, "#1c1a2b");
+function drawGreebles(ctx: CanvasRenderingContext2D) {
+  ctx.fillStyle = "rgba(10, 6, 20, 0.6)";
+  const vents: [number, number, number, number][] = [
+    [-0.12, -0.05, 0.05, 0.02],
+    [0.07, -0.05, 0.05, 0.02],
+    [-0.1, 0.68, 0.04, 0.06],
+    [0.06, 0.68, 0.04, 0.06],
+  ];
+  for (const [x, y, w, h] of vents) ctx.fillRect(x, y, w, h);
 
+  ctx.fillStyle = "rgba(233, 213, 255, 0.5)";
+  for (const x of [0.44, 0.28, -0.28, -0.44]) {
+    ctx.beginPath();
+    ctx.arc(x, 0.35, 0.012, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function drawHull(ctx: CanvasRenderingContext2D) {
   ctx.beginPath();
   ctx.moveTo(0, -1);
   ctx.lineTo(0.16, -0.62);
@@ -178,10 +256,36 @@ function drawHull(ctx: CanvasRenderingContext2D) {
   ctx.lineTo(-0.2, -0.2);
   ctx.lineTo(-0.16, -0.62);
   ctx.closePath();
-  ctx.fillStyle = bodyGradient;
+
+  const sideGradient = ctx.createLinearGradient(-0.58, 0, 0.58, 0);
+  sideGradient.addColorStop(0, "#17151f");
+  sideGradient.addColorStop(0.5, "#68627f");
+  sideGradient.addColorStop(1, "#17151f");
+  ctx.fillStyle = sideGradient;
   ctx.fill();
+
+  ctx.save();
+  ctx.clip();
+  const toneGradient = ctx.createLinearGradient(0, -1, 0, 0.95);
+  toneGradient.addColorStop(0, "rgba(255, 255, 255, 0.16)");
+  toneGradient.addColorStop(0.45, "rgba(255, 255, 255, 0)");
+  toneGradient.addColorStop(1, "rgba(0, 0, 0, 0.35)");
+  ctx.fillStyle = toneGradient;
+  ctx.fillRect(-0.6, -1, 1.2, 2);
+  drawGreebles(ctx);
+  ctx.restore();
+
   ctx.strokeStyle = "rgba(233, 213, 255, 0.4)";
   ctx.lineWidth = 0.018;
+  ctx.stroke();
+
+  ctx.strokeStyle = "rgba(103, 232, 249, 0.55)";
+  ctx.lineWidth = 0.014;
+  ctx.beginPath();
+  ctx.moveTo(-0.16, -0.62);
+  ctx.lineTo(-0.2, -0.2);
+  ctx.lineTo(-0.5, 0.1);
+  ctx.lineTo(-0.58, 0.5);
   ctx.stroke();
 
   ctx.strokeStyle = "rgba(15, 10, 30, 0.55)";
@@ -197,7 +301,7 @@ function drawHull(ctx: CanvasRenderingContext2D) {
   ctx.lineTo(-0.28, 0.62);
   ctx.stroke();
 
-  ctx.strokeStyle = "rgba(255, 255, 255, 0.25)";
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
   ctx.lineWidth = 0.01;
   ctx.beginPath();
   ctx.moveTo(0.03, -0.9);
@@ -205,14 +309,20 @@ function drawHull(ctx: CanvasRenderingContext2D) {
   ctx.stroke();
 
   const canopyGradient = ctx.createLinearGradient(0, -0.55, 0, -0.1);
-  canopyGradient.addColorStop(0, "rgba(233, 213, 255, 0.85)");
-  canopyGradient.addColorStop(1, "rgba(124, 58, 237, 0.55)");
+  canopyGradient.addColorStop(0, "rgba(233, 213, 255, 0.9)");
+  canopyGradient.addColorStop(1, "rgba(124, 58, 237, 0.6)");
   ctx.beginPath();
   ctx.ellipse(0, -0.34, 0.09, 0.24, 0, 0, Math.PI * 2);
   ctx.fillStyle = canopyGradient;
   ctx.fill();
-  ctx.strokeStyle = "rgba(15, 10, 30, 0.6)";
+  ctx.strokeStyle = "rgba(15, 10, 30, 0.65)";
   ctx.lineWidth = 0.012;
+  ctx.stroke();
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
+  ctx.lineWidth = 0.006;
+  ctx.beginPath();
+  ctx.moveTo(0, -0.56);
+  ctx.lineTo(0, -0.12);
   ctx.stroke();
 }
 
@@ -237,26 +347,23 @@ export function drawShip(ctx: CanvasRenderingContext2D, flight: ShipFlight, now:
   const t = (now - flight.startTime) / flight.duration;
   if (t < 0 || t > 1) return false;
 
-  const pos = bezierPoint(flight.p0, flight.p1, flight.p2, t);
-  const tangent = bezierTangent(flight.p0, flight.p1, flight.p2, t);
-  const angle = Math.atan2(tangent.y, tangent.x);
-  const depthCurve = depthCurveFor(flight.mode, t);
-  const scale = 20 * (0.3 + depthCurve * 2.1);
-  const opacity = Math.min(1, 0.3 + depthCurve * 1.3);
+  const pose = getPose(flight, t);
+  const scale = 20 * (0.3 + pose.depthCurve * 2.3);
+  const opacity = Math.min(1, 0.3 + pose.depthCurve * 1.3) * pose.edgeFade;
 
   renderTrail(ctx, flight.trail);
 
   const lastSample = flight.trail[flight.trail.length - 1];
   if (!lastSample || now - lastSample.time >= TRAIL_SAMPLE_EVERY_MS) {
-    flight.trail.push({ x: pos.x, y: pos.y, scale, angle, opacity, time: now });
+    flight.trail.push({ x: pose.x, y: pose.y, scale, angle: pose.angle, opacity, time: now });
     if (flight.trail.length > TRAIL_LENGTH) flight.trail.shift();
   }
 
   const flicker = 0.75 + 0.25 * Math.sin(now * 0.02 + flight.seed * 7);
 
   ctx.save();
-  ctx.translate(pos.x, pos.y);
-  ctx.rotate(angle + Math.PI / 2);
+  ctx.translate(pose.x, pose.y);
+  ctx.rotate(pose.angle + Math.PI / 2);
   ctx.scale(scale, scale);
   ctx.globalAlpha = opacity;
 
