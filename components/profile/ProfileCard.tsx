@@ -7,7 +7,6 @@ import { useKonamiCode } from "@/hooks/useKonamiCode";
 import { getCustomStatus } from "@/lib/lanyard/status";
 import type { LanyardData } from "@/lib/lanyard/types";
 import type { GithubStats } from "@/lib/github/stats";
-import type { ContributionDay } from "@/lib/github/contributions";
 import { SocialLinks } from "@/components/social/SocialLinks";
 import { NowPlaying } from "@/components/spotify/NowPlaying";
 import { CurrentActivity } from "@/components/profile/activity/CurrentActivity";
@@ -18,7 +17,6 @@ import { Badges } from "./badges/Badges";
 import { TiltCard } from "./TiltCard";
 import { AccountAge } from "./AccountAge";
 import { GithubStatsRow } from "./GithubStatsRow";
-import { ContributionHeatmap } from "./ContributionHeatmap";
 import { CardMenu } from "./actions/CardMenu";
 
 const EGG_DURATION_MS = 6000;
@@ -26,14 +24,12 @@ const EGG_DURATION_MS = 6000;
 interface ProfileCardProps {
   initialData?: LanyardData | null;
   githubStats?: GithubStats | null;
-  contributions?: ContributionDay[] | null;
   qrCodeSvg: string;
 }
 
 export function ProfileCard({
   initialData = null,
   githubStats = null,
-  contributions = null,
   qrCodeSvg,
 }: ProfileCardProps) {
   const { data, status } = useLanyard(DISCORD_ID, initialData);
@@ -72,7 +68,6 @@ export function ProfileCard({
             <Badges />
             {data && <AccountAge discordId={data.discord_user.id} />}
             <GithubStatsRow stats={githubStats} />
-            <ContributionHeatmap days={contributions} />
             {data &&
               (data.listening_to_spotify ? (
                 <NowPlaying spotify={data.spotify} />
