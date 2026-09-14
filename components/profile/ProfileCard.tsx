@@ -17,6 +17,7 @@ import { Badges } from "./badges/Badges";
 import { TiltCard } from "./TiltCard";
 import { AccountAge } from "./AccountAge";
 import { GithubStatsRow } from "./GithubStatsRow";
+import { LiveVisitors } from "./LiveVisitors";
 import { CardMenu } from "./actions/CardMenu";
 
 const EGG_DURATION_MS = 6000;
@@ -80,6 +81,7 @@ export function ProfileCard({
       <div className="mt-6">
         <SocialLinks />
       </div>
+      <LiveVisitors />
     </div>
   );
 }
