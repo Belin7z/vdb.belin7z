@@ -257,6 +257,45 @@ body {
   animation: eye-look-around 6s ease-in-out infinite;
 }
 
+.volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.volume-slider::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 9999px;
+  background: rgba(168, 85, 247, 0.3);
+}
+
+.volume-slider::-moz-range-track {
+  height: 4px;
+  border-radius: 9999px;
+  background: rgba(168, 85, 247, 0.3);
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: -4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #f0abfc;
+  box-shadow: 0 0 8px rgba(240, 171, 252, 0.8);
+}
+
+.volume-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: none;
+  border-radius: 50%;
+  background: #f0abfc;
+  box-shadow: 0 0 8px rgba(240, 171, 252, 0.8);
+}
+
 .skeleton-shimmer {
   background-image: linear-gradient(
     90deg,
