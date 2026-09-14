@@ -9,6 +9,6 @@ import {
 export const SOCIAL_LINKS = [
   { label: "Instagram", href: SOCIALS.instagram, icon: InstagramIcon },
   { label: "GitHub", href: SOCIALS.github, icon: GithubIcon },
-  { label: "Discord", href: SOCIALS.discord, icon: DiscordIcon },
+  { label: "Discord", href: SOCIALS.discord, icon: DiscordIcon, copyValue: "vdb.belin7z" },
   { label: "Spotify", href: SOCIALS.spotify, icon: SpotifyIcon },
 ];
