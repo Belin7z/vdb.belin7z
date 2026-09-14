@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import { generateStars, generateNebulae, type Star } from "@/lib/galaxy/star-field";
-import { createShipFlight, drawShip, type ShipFlight } from "@/lib/galaxy/spaceship";
 
 const STAR_COUNT = 220;
 const ROTATION_PERIOD_MS = 240000;
@@ -57,8 +56,6 @@ export function GalaxyCanvas() {
     const stars = generateStars(STAR_COUNT);
     const nebulae = generateNebulae(4);
     const comets: Comet[] = [];
-    let shipFlight: ShipFlight | null = null;
-    let nextShipAt = performance.now() + 4000 + Math.random() * 8000;
 
     function drawSparkle(x: number, y: number, size: number, opacity: number, color: string) {
       ctx!.save();
@@ -246,17 +243,6 @@ export function GalaxyCanvas() {
       if (!reducedMotion) {
         if (Math.random() < COMET_CHANCE_PER_FRAME) spawnComet();
         drawComets();
-
-        if (!shipFlight && now >= nextShipAt) {
-          shipFlight = createShipFlight(width, height, now);
-        }
-        if (shipFlight) {
-          const stillFlying = drawShip(ctx!, shipFlight, now);
-          if (!stillFlying) {
-            shipFlight = null;
-            nextShipAt = now + 25000 + Math.random() * 20000;
-          }
-        }
 
         rafId = requestAnimationFrame(render);
       }
