@@ -10,7 +10,7 @@ export function ServerTag({
 
   const badgeUrl =
     primaryGuild.badge && primaryGuild.identity_guild_id
-      ? `https://cdn.discordapp.com/clan-badges/${primaryGuild.identity_guild_id}/${primaryGuild.badge}.png?size=16`
+      ? `https://cdn.discordapp.com/clan-badges/${primaryGuild.identity_guild_id}/${primaryGuild.badge}.png?size=32`
       : null;
 
   return (
