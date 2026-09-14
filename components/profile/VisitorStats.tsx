@@ -18,7 +18,7 @@ export function VisitorStats() {
     <div className="mt-4 flex items-center justify-center gap-1.5 text-[11px] text-purple-300/50">
       {showLive && (
         <>
-          <EyeGraphic size={22} looping />
+          <EyeGraphic size={22} />
           <span>{liveLabel}</span>
         </>
       )}

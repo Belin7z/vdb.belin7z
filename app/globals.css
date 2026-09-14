@@ -106,49 +106,6 @@
   }
 }
 
-@keyframes creepy-eye-fade {
-  0%,
-  100% {
-    opacity: 0;
-  }
-  8%,
-  88% {
-    opacity: 1;
-  }
-}
-
-@keyframes creepy-eye-lid-top {
-  0%,
-  100% {
-    transform: scaleY(1);
-  }
-  22%,
-  68% {
-    transform: scaleY(0.05);
-  }
-}
-
-@keyframes creepy-eye-lid-bottom {
-  0%,
-  100% {
-    transform: scaleY(1);
-  }
-  22%,
-  68% {
-    transform: scaleY(0.05);
-  }
-}
-
-@keyframes creepy-eye-glow {
-  0%,
-  100% {
-    opacity: 0.75;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
 @keyframes eye-blink-lid-top {
   0%,
   100% {
@@ -251,29 +208,6 @@ body {
   animation: border-flow 3s linear infinite;
 }
 
-.creepy-eye-fade {
-  animation: creepy-eye-fade 7s ease-in-out both;
-}
-
-.creepy-eye-lid-top,
-.creepy-eye-lid-bottom {
-  transform-box: fill-box;
-  animation: creepy-eye-lid-top 7s cubic-bezier(0.6, 0, 0.4, 1) both;
-}
-
-.creepy-eye-lid-top {
-  transform-origin: top;
-}
-
-.creepy-eye-lid-bottom {
-  transform-origin: bottom;
-  animation-name: creepy-eye-lid-bottom;
-}
-
-.creepy-eye-glow {
-  animation: creepy-eye-glow 1.6s ease-in-out infinite;
-}
-
 .eye-blink-lid-top,
 .eye-blink-lid-bottom {
   transform-box: fill-box;
@@ -312,10 +246,7 @@ body {
   .animate-eq-bar-1,
   .animate-eq-bar-2,
   .animate-eq-bar-3,
-  .skeleton-shimmer,
-  .creepy-eye-lid-top,
-  .creepy-eye-lid-bottom,
-  .creepy-eye-glow {
+  .skeleton-shimmer {
     animation: none;
   }
 
