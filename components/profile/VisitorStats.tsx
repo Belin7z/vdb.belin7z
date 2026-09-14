@@ -4,26 +4,15 @@ import { usePresence } from "@/hooks/usePresence";
 import { EyeGraphic } from "@/components/particles/EyeGraphic";
 
 export function VisitorStats() {
-  const { live, total } = usePresence();
-  if (live === null && total === null) return null;
+  const { total } = usePresence();
+  if (total === null) return null;
 
-  const showLive = live !== null && live > 0;
-  const liveLabel = live === 1 ? "1 pessoa vendo agora" : `${live} pessoas vendo agora`;
-  const totalLabel =
-    total !== null
-      ? `${total.toLocaleString("pt-BR")} ${total === 1 ? "visita" : "visitas"} no total`
-      : null;
+  const totalLabel = `${total.toLocaleString("pt-BR")} ${total === 1 ? "visita" : "visitas"} no total`;
 
   return (
-    <div className="mt-4 flex items-center justify-center gap-1.5 text-[11px] text-purple-300/50">
-      {showLive && (
-        <>
-          <EyeGraphic size={22} />
-          <span>{liveLabel}</span>
-        </>
-      )}
-      {showLive && totalLabel && <span className="text-purple-300/30">·</span>}
-      {totalLabel && <span>{totalLabel}</span>}
+    <div className="mt-4 flex items-center justify-center gap-2 text-[11px] text-purple-300/50">
+      <EyeGraphic size={34} />
+      <span>{totalLabel}</span>
     </div>
   );
 }
