@@ -111,9 +111,12 @@
   100% {
     transform: scaleY(1);
   }
-  35%,
-  55% {
+  8%,
+  88% {
     transform: scaleY(0.05);
+  }
+  96% {
+    transform: scaleY(1);
   }
 }
 
@@ -122,19 +125,42 @@
   100% {
     transform: scaleY(1);
   }
-  35%,
-  55% {
+  8%,
+  88% {
     transform: scaleY(0.05);
+  }
+  96% {
+    transform: scaleY(1);
   }
 }
 
 @keyframes eye-blink-glow {
   0%,
   100% {
-    opacity: 0.4;
+    opacity: 0.65;
   }
   45% {
     opacity: 1;
+  }
+}
+
+@keyframes eye-look-around {
+  0%,
+  8%,
+  25% {
+    transform: translateX(0);
+  }
+  40%,
+  52% {
+    transform: translateX(-9px);
+  }
+  64%,
+  76% {
+    transform: translateX(9px);
+  }
+  88%,
+  100% {
+    transform: translateX(0);
   }
 }
 
@@ -211,7 +237,7 @@ body {
 .eye-blink-lid-top,
 .eye-blink-lid-bottom {
   transform-box: fill-box;
-  animation: eye-blink-lid-top 4s ease-in-out infinite;
+  animation: eye-blink-lid-top 6s ease-in-out infinite;
 }
 
 .eye-blink-lid-top {
@@ -225,6 +251,10 @@ body {
 
 .eye-blink-glow {
   animation: eye-blink-glow 4s ease-in-out infinite;
+}
+
+.eye-look-around {
+  animation: eye-look-around 6s ease-in-out infinite;
 }
 
 .skeleton-shimmer {
@@ -259,6 +289,11 @@ body {
   .eye-blink-glow {
     animation: none;
     opacity: 0.85;
+  }
+
+  .eye-look-around {
+    animation: none;
+    transform: translateX(0);
   }
 
   .animate-card-enter,
