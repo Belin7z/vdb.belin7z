@@ -6,6 +6,7 @@ import { LazyGalaxyBackground } from "@/components/particles/LazyGalaxyBackgroun
 import { ProfileCard } from "@/components/profile/ProfileCard";
 import { BootOverlay } from "@/components/intro/BootOverlay";
 import { AmbientToggle } from "@/components/audio/AmbientToggle";
+import { CinematicOverlay } from "@/components/effects/CinematicOverlay";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +23,7 @@ export default async function Home() {
       <ProfileCard initialData={initialData} githubStats={githubStats} qrCodeSvg={qrCodeSvg} />
       <AmbientToggle />
       <BootOverlay />
+      <CinematicOverlay />
     </main>
   );
 }
