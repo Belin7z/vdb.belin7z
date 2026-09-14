@@ -9,7 +9,13 @@ export function CurrentActivity({ activities }: { activities: LanyardActivity[] 
   const activity = activities.find((a) => a.type === PLAYING_ACTIVITY_TYPE);
   const elapsed = useElapsedTime(activity?.timestamps?.start);
 
-  if (!activity) return null;
+  if (!activity) {
+    return (
+      <div className="mt-3 w-full rounded-2xl border border-purple-400/10 bg-white/[0.03] p-3 text-center">
+        <p className="text-xs text-purple-300/50">Sem atividade no momento</p>
+      </div>
+    );
+  }
 
   const imageUrl = getActivityAssetUrl(activity.application_id, activity.assets?.large_image);
 
