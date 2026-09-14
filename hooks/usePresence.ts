@@ -17,8 +17,13 @@ function getVisitorId(): string {
   }
 }
 
-export function useLiveVisitors(): number | null {
-  const [count, setCount] = useState<number | null>(null);
+interface Presence {
+  live: number | null;
+  total: number | null;
+}
+
+export function usePresence(): Presence {
+  const [presence, setPresence] = useState<Presence>({ live: null, total: null });
 
   useEffect(() => {
     const visitorId = getVisitorId();
@@ -33,7 +38,12 @@ export function useLiveVisitors(): number | null {
         });
         if (!res.ok) return;
         const data = await res.json();
-        if (!cancelled && typeof data.count === "number") setCount(data.count);
+        if (!cancelled) {
+          setPresence({
+            live: typeof data.live === "number" ? data.live : null,
+            total: typeof data.total === "number" ? data.total : null,
+          });
+        }
       } catch {
         // sem rede/indisponível — indicador simplesmente não aparece
       }
@@ -47,5 +57,5 @@ export function useLiveVisitors(): number | null {
     };
   }, []);
 
-  return count;
+  return presence;
 }
