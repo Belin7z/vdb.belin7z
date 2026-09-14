@@ -43,6 +43,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pt-BR">
+      <head>
+        <link rel="preconnect" href="https://cdn.discordapp.com" />
+        <link rel="preconnect" href="https://api.lanyard.rest" />
+      </head>
       <body className={`${inter.variable} ${sora.variable} antialiased`}>
         {children}
         <Analytics />
