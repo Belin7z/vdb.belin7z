@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { EyeGraphic } from "./EyeGraphic";
 
 interface EyeSpawn {
   x: number;
@@ -22,47 +23,6 @@ function randomSpawn(): EyeSpawn {
     y: 10 + Math.random() * 70,
     size: 70 + Math.random() * 50,
   };
-}
-
-function EyeGraphic({ size }: { size: number }) {
-  return (
-    <svg
-      viewBox="0 0 200 120"
-      width={size}
-      height={size * 0.6}
-      className="creepy-eye-fade"
-      style={{ filter: "drop-shadow(0 0 18px rgba(192,132,252,0.55))" }}
-    >
-      <defs>
-        <clipPath id="creepy-eye-shape">
-          <path d="M10,60 Q100,8 190,60 Q100,112 10,60 Z" />
-        </clipPath>
-        <radialGradient id="creepy-eye-iris" cx="50%" cy="50%" r="55%">
-          <stop offset="0%" stopColor="#f0abfc" />
-          <stop offset="55%" stopColor="#a855f7" />
-          <stop offset="100%" stopColor="#2e1065" />
-        </radialGradient>
-      </defs>
-
-      <g clipPath="url(#creepy-eye-shape)">
-        <rect x="0" y="0" width="200" height="120" fill="#1a0b2e" />
-        <circle cx="100" cy="60" r="36" fill="url(#creepy-eye-iris)" className="creepy-eye-glow" />
-        <ellipse cx="100" cy="60" rx="6" ry="32" fill="#08010f" />
-        <circle cx="100" cy="60" r="36" fill="none" stroke="#f0abfc" strokeWidth="1.5" opacity="0.5" />
-      </g>
-
-      <path
-        d="M10,60 Q100,8 190,60 Q100,112 10,60 Z"
-        fill="none"
-        stroke="#c084fc"
-        strokeWidth="1"
-        opacity="0.35"
-      />
-
-      <rect className="creepy-eye-lid-top" x="0" y="0" width="200" height="60" fill="#05010f" />
-      <rect className="creepy-eye-lid-bottom" x="0" y="60" width="200" height="60" fill="#05010f" />
-    </svg>
-  );
 }
 
 export function CreepyEye() {
@@ -104,7 +64,7 @@ export function CreepyEye() {
         transform: "translate(-50%, -50%)",
       }}
     >
-      <EyeGraphic size={eye.size} />
+      <EyeGraphic size={eye.size} className="creepy-eye-fade" />
     </div>
   );
 }

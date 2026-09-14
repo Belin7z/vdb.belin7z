@@ -1,6 +1,7 @@
 "use client";
 
 import { usePresence } from "@/hooks/usePresence";
+import { EyeGraphic } from "@/components/particles/EyeGraphic";
 
 export function VisitorStats() {
   const { live, total } = usePresence();
@@ -17,10 +18,7 @@ export function VisitorStats() {
     <div className="mt-4 flex items-center justify-center gap-1.5 text-[11px] text-purple-300/50">
       {showLive && (
         <>
-          <span className="relative flex h-1.5 w-1.5">
-            <span className="absolute inline-flex h-full w-full animate-status-ping rounded-full bg-emerald-400" />
-            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
-          </span>
+          <EyeGraphic size={22} looping />
           <span>{liveLabel}</span>
         </>
       )}
