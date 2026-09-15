@@ -17,18 +17,20 @@ const BURST_LIFETIME_MS = 700;
 export function useParticleBurst() {
   const [burst, setBurst] = useState<BurstParticle[]>([]);
 
-  function trigger() {
+  function trigger(intensity = 1) {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const particles: BurstParticle[] = Array.from({ length: PARTICLE_COUNT }, (_, i) => {
-      const angle = ((360 / PARTICLE_COUNT) * i + Math.random() * 20) * (Math.PI / 180);
-      const distance = 40 + Math.random() * 30;
+    const count = Math.round(PARTICLE_COUNT * intensity);
+    const reach = Math.min(intensity, 2);
+    const particles: BurstParticle[] = Array.from({ length: count }, (_, i) => {
+      const angle = ((360 / count) * i + Math.random() * 20) * (Math.PI / 180);
+      const distance = (40 + Math.random() * 30) * reach;
       return {
         id: Date.now() + i,
         x: Math.cos(angle) * distance,
         y: Math.sin(angle) * distance,
         color: COLORS[i % COLORS.length],
-        size: 3 + Math.random() * 3,
+        size: (3 + Math.random() * 3) * Math.min(1 + (intensity - 1) * 0.3, 1.6),
       };
     });
 

@@ -2,8 +2,18 @@
 
 import { useEffect, useState } from "react";
 
-export function useVisitCount(): number | null {
-  const [total, setTotal] = useState<number | null>(null);
+interface VisitCount {
+  total: number | null;
+  isReturning: boolean;
+  crossedMilestone: number | null;
+}
+
+export function useVisitCount(): VisitCount {
+  const [state, setState] = useState<VisitCount>({
+    total: null,
+    isReturning: false,
+    crossedMilestone: null,
+  });
 
   useEffect(() => {
     let cancelled = false;
@@ -12,7 +22,12 @@ export function useVisitCount(): number | null {
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (!cancelled && data && typeof data.total === "number") {
-          setTotal(data.total);
+          setState({
+            total: data.total,
+            isReturning: Boolean(data.isReturning),
+            crossedMilestone:
+              typeof data.crossedMilestone === "number" ? data.crossedMilestone : null,
+          });
         }
       })
       .catch(() => {
@@ -24,5 +39,5 @@ export function useVisitCount(): number | null {
     };
   }, []);
 
-  return total;
+  return state;
 }

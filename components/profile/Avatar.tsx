@@ -23,7 +23,7 @@ export function Avatar({ user, status, connectionStatus, customStatus }: AvatarP
       className={`relative mx-auto h-28 w-28 select-none ${
         user ? "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d0420]" : ""
       } rounded-full`}
-      onClick={user ? trigger : undefined}
+      onClick={user ? () => trigger() : undefined}
       role={user ? "button" : undefined}
       tabIndex={user ? 0 : undefined}
       aria-label={user ? "Efeito visual" : undefined}

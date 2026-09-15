@@ -2,25 +2,38 @@
 
 import { useEffect, useRef } from "react";
 import { useVisitCount } from "@/hooks/useVisitCount";
+import { useToast } from "@/hooks/useToast";
+import { Toast } from "@/components/ui/Toast";
 import { EyeGraphic } from "@/components/particles/EyeGraphic";
 import { useParticleBurst, ParticleBurstLayer } from "./ParticleBurst";
 
-const MILESTONES = [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000, 25000, 50000, 100000];
+function getBurstIntensity(milestone: number): number {
+  if (milestone >= 10000) return 3;
+  if (milestone >= 1000) return 2;
+  if (milestone >= 100) return 1.5;
+  return 1;
+}
 
 export function VisitorStats() {
-  const total = useVisitCount();
+  const { total, isReturning, crossedMilestone } = useVisitCount();
   const { burst, trigger } = useParticleBurst();
-  const previousTotalRef = useRef<number | null>(null);
+  const { message, showToast } = useToast();
+  const celebratedRef = useRef(false);
+  const welcomedRef = useRef(false);
 
   useEffect(() => {
-    if (total === null) return;
-
-    const previous = previousTotalRef.current;
-    if (previous !== null && MILESTONES.some((m) => previous < m && total >= m)) {
-      trigger();
+    if (crossedMilestone !== null && !celebratedRef.current) {
+      celebratedRef.current = true;
+      trigger(getBurstIntensity(crossedMilestone));
     }
-    previousTotalRef.current = total;
-  }, [total, trigger]);
+  }, [crossedMilestone, trigger]);
+
+  useEffect(() => {
+    if (isReturning && !welcomedRef.current) {
+      welcomedRef.current = true;
+      showToast("Bem-vindo de volta!");
+    }
+  }, [isReturning, showToast]);
 
   if (total === null) return null;
 
@@ -28,6 +41,7 @@ export function VisitorStats() {
 
   return (
     <div className="relative mt-4 flex items-center justify-center gap-2 text-[11px] text-purple-300/50">
+      <Toast message={message} />
       <ParticleBurstLayer burst={burst} />
       <EyeGraphic size={34} />
       <span>{totalLabel}</span>
