@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { usePresence } from "@/hooks/usePresence";
+import { useVisitCount } from "@/hooks/useVisitCount";
 import { EyeGraphic } from "@/components/particles/EyeGraphic";
 import { useParticleBurst, ParticleBurstLayer } from "./ParticleBurst";
 
 const MILESTONES = [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000, 25000, 50000, 100000];
 
 export function VisitorStats() {
-  const { total } = usePresence();
+  const total = useVisitCount();
   const { burst, trigger } = useParticleBurst();
   const previousTotalRef = useRef<number | null>(null);
 
