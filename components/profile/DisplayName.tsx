@@ -15,10 +15,13 @@ export function DisplayName({ user, connectionStatus }: DisplayNameProps) {
     return (
       <div className="mt-4 text-center">
         <h1
-          className="font-display text-2xl font-semibold tracking-tight text-white"
+          className="relative font-display text-2xl font-semibold tracking-tight text-white"
           style={getDisplayNameStyle(user.display_name_styles)}
         >
           {user.global_name ?? user.username}
+          <span aria-hidden="true" className="name-shimmer pointer-events-none absolute inset-0">
+            {user.global_name ?? user.username}
+          </span>
         </h1>
         <div className="mt-0.5 grid grid-cols-[1fr_auto_1fr] items-center gap-1.5">
           <span aria-hidden="true" className="invisible justify-self-end">
