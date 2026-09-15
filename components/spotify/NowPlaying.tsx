@@ -36,6 +36,7 @@ export function NowPlaying({ spotify }: { spotify: LanyardSpotify | null }) {
         elapsedMs={elapsedMs}
         durationMs={durationMs}
         progress={progress}
+        seed={`${spotify.song}${spotify.artist}`}
       />
     </div>
   );
