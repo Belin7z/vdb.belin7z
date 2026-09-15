@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { VolumeOffIcon, VolumeOnIcon } from "./icons";
+import { AudioVisualizer } from "./AudioVisualizer";
 
 const TRACK_SRC = "/audio/ambient-track.mp3";
 const DEFAULT_VOLUME = 0.4;
@@ -10,6 +11,7 @@ export function AmbientToggle() {
   const [enabled, setEnabled] = useState(false);
   const [volume, setVolume] = useState(DEFAULT_VOLUME);
   const [hovering, setHovering] = useState(false);
+  const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -22,6 +24,18 @@ export function AmbientToggle() {
       audio.loop = true;
       audio.volume = volume;
       audioRef.current = audio;
+
+      try {
+        const ctx = new AudioContext();
+        const source = ctx.createMediaElementSource(audio);
+        const analyserNode = ctx.createAnalyser();
+        analyserNode.fftSize = 64;
+        source.connect(analyserNode);
+        analyserNode.connect(ctx.destination);
+        setAnalyser(analyserNode);
+      } catch {
+        // Web Audio indisponível — toca normalmente, sem visualizador
+      }
     }
     return audioRef.current;
   }
@@ -48,6 +62,7 @@ export function AmbientToggle() {
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
     >
+      <AudioVisualizer analyser={analyser} active={enabled} />
       <div
         className={`overflow-hidden rounded-full border border-purple-400/20 bg-[#150733]/80 backdrop-blur-sm transition-all duration-300 ${
           hovering ? "w-24 px-3 opacity-100" : "w-0 px-0 opacity-0"
