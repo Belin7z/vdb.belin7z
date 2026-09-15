@@ -4,6 +4,7 @@ import { useState } from "react";
 import { DISCORD_ID } from "@/config/site";
 import { useLanyard } from "@/hooks/useLanyard";
 import { useKonamiCode } from "@/hooks/useKonamiCode";
+import { useAlbumColor } from "@/hooks/useAlbumColor";
 import { getCustomStatus } from "@/lib/lanyard/status";
 import type { LanyardData } from "@/lib/lanyard/types";
 import type { GithubStats } from "@/lib/github/stats";
@@ -35,6 +36,9 @@ export function ProfileCard({
 }: ProfileCardProps) {
   const { data, status } = useLanyard(DISCORD_ID, initialData);
   const [eggActive, setEggActive] = useState(false);
+  const albumColor = useAlbumColor(
+    data?.listening_to_spotify ? data.spotify?.album_art_url : null
+  );
 
   useKonamiCode(() => {
     setEggActive(true);
@@ -52,6 +56,11 @@ export function ProfileCard({
                 ? "animate-border-flow-gold bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-300"
                 : "animate-border-flow bg-gradient-to-r from-fuchsia-500 via-purple-500 to-violet-500"
             }`}
+            style={
+              !eggActive && albumColor
+                ? { backgroundImage: `linear-gradient(90deg, ${albumColor}, #a855f7, ${albumColor})` }
+                : undefined
+            }
           />
           <div
             id="belin7z-profile-card"
