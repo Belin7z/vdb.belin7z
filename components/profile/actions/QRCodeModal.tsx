@@ -39,10 +39,13 @@ export function QRCodeModal({ svg, onClose }: QRCodeModalProps) {
             <path d="m6 6 12 12M18 6 6 18" strokeLinecap="round" />
           </svg>
         </button>
-        <div
-          className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 [&_svg]:h-full [&_svg]:w-full"
-          dangerouslySetInnerHTML={{ __html: svg }}
-        />
+        <div className="relative">
+          <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-fuchsia-500 via-purple-500 to-violet-500 opacity-60 blur-md" />
+          <div
+            className="relative rounded-2xl border border-white/10 bg-white/[0.03] p-4 [&_svg]:h-full [&_svg]:w-full"
+            dangerouslySetInnerHTML={{ __html: svg }}
+          />
+        </div>
         <p className="text-center text-xs text-purple-300/60">{SITE.url}</p>
       </div>
     </div>
