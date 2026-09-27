@@ -40,3 +40,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# ferramentas de IA (uso local, nao faz parte do projeto)
+CLAUDE.md
+AGENTS.md
+.agents/
+skills-lock.json
