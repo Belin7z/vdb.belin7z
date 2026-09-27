@@ -18,9 +18,15 @@ function hashString(str: string): number {
   return hash;
 }
 
+// Hash de inteiros puro (sem seno/ponto flutuante transcendental) para que o
+// resultado seja idêntico entre o SSR (Node) e a hidratação no navegador —
+// Math.sin não tem precisão garantida bit-a-bit entre builds do V8.
 function pseudoRandom(seed: number, index: number): number {
-  const value = Math.sin(seed * 12.9898 + index * 78.233) * 43758.5453;
-  return value - Math.floor(value);
+  let h = (seed ^ index) >>> 0;
+  h = Math.imul(h ^ (h >>> 16), 2246822507);
+  h = Math.imul(h ^ (h >>> 13), 3266489909);
+  h = (h ^ (h >>> 16)) >>> 0;
+  return h / 4294967296;
 }
 
 export function NowPlayingProgress({
