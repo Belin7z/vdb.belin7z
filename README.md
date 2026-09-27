@@ -1,63 +1,60 @@
 # Belin7z
 
-Site de perfil pessoal com tema roxo e partículas mágicas, avatar e nome do
-Discord em tempo real, "Ouvindo agora" do Spotify com barra de progresso, e
-atalhos para redes sociais.
+Meu perfil pessoal. Avatar e status do Discord em tempo real via Lanyard,
+"ouvindo agora" do Spotify com barra em waveform, contador de visitas,
+e um fundo de galáxia inteiro em canvas puro — sem tsparticles, sem
+three.js, nada. Estrelas, nebulosas, cometas: tudo desenhado à mão em
+`lib/galaxy` e `components/particles/GalaxyCanvas.tsx`.
 
-Feito com Next.js (App Router), TypeScript, Tailwind CSS v4 e
-[tsparticles](https://particles.js.org/). Os dados do Discord/Spotify vêm do
-[Lanyard](https://github.com/Phineas/lanyard) — um serviço público e gratuito
-que **não exige nenhum token de conta**, apenas o seu Discord User ID.
+Next.js (App Router) + TypeScript + Tailwind v4.
 
-## Configuração
+## Rodando local
 
-1. Entre no servidor do Lanyard: https://discord.gg/lanyard (obrigatório para
-   o Lanyard conseguir ler sua presença).
-2. No Discord, ative o **Modo Desenvolvedor** em
-   Configurações > Avançado.
-3. Clique com o botão direito no seu próprio perfil e escolha
-   **Copiar ID do Usuário**.
-4. Copie `.env.example` para `.env.local` e cole o ID:
+1. Entra em https://discord.gg/lanyard (o Lanyard só lê sua presença se
+   você estiver no servidor dele).
+2. Ativa o Modo Desenvolvedor no Discord (Configurações > Avançado),
+   clica com o botão direito no seu perfil e copia o ID do usuário.
+3. Copia `.env.example` pra `.env.local` e cola o ID:
 
    ```
    NEXT_PUBLIC_DISCORD_ID=seu_id_aqui
    ```
 
-5. Para o "Ouvindo agora" do Spotify aparecer, conecte sua conta Spotify em
-   Configurações do Discord > Conexões, e deixe "Mostrar nas atividades"
-   ativado.
-
-## Desenvolvimento
+4. Pra aparecer o "ouvindo agora", conecta o Spotify nas Conexões do
+   Discord e deixa "Mostrar nas atividades" ligado.
 
 ```bash
 npm install
 npm run dev
 ```
 
-Abra http://localhost:3000.
+O contador de visitas usa Redis (Upstash, via integração da Vercel). Sem
+`KV_REST_API_URL` e `KV_REST_API_TOKEN` no `.env.local` ele só some da
+tela — não quebra o resto.
 
-## Deploy (Vercel)
+## Deploy
 
 ```bash
 vercel --prod
 ```
 
-Lembre-se de configurar `NEXT_PUBLIC_DISCORD_ID` também nas
-**Environment Variables** do projeto na Vercel.
+Configura `NEXT_PUBLIC_DISCORD_ID` (e as env vars do Redis, se for usar
+o contador) nas Environment Variables do projeto na Vercel também.
 
-## Estrutura do projeto
+## Estrutura
 
 ```
-app/                   rotas (App Router), layout e estilos globais
+app/                  rotas, layout, globals.css, API do contador de visitas
 components/
-  particles/           fundo de partículas mágicas (tsparticles)
-  profile/              avatar, nome exibido, status do Discord
-  social/               ícones e links de redes sociais
-  spotify/               widget "Ouvindo agora" com progresso
-config/site.ts          nome do site, ID do Discord, links sociais
-hooks/                  useLanyard (WebSocket em tempo real), useSpotifyProgress
-lib/lanyard/            tipos, constantes e conexão WebSocket com o Lanyard
-lib/time.ts             formatação de tempo (mm:ss)
+  particles/           galáxia em canvas + olho que pisca
+  profile/              card, badges, easter egg, stats de visita
+  spotify/               "ouvindo agora" + waveform
+  audio/                  música ambiente com visualizador reagindo ao áudio
+lib/lanyard/           tipos e conexão WebSocket com o Lanyard
+lib/galaxy/            geração de estrelas e nebulosas
+lib/redis.ts           cliente Upstash
+hooks/                 useLanyard, useVisitCount, useSpotifyProgress...
+config/site.ts         nome do site, ID do Discord, links sociais
 ```
 
 ## Redes sociais
